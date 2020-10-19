@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,4 +31,5 @@ Route::group(['middleware'=>'auth:api'], function () {
     Route::put('user/info', [UserController::class, 'updateInfo']);
     Route::put('user/password', [UserController::class, 'updatePassword']);
     Route::apiResource('users', UserController::class);
+    Route::apiResource('roles', RoleController::class);
 });

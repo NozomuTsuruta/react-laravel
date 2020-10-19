@@ -15,17 +15,17 @@ class UserController extends Controller
 {
     public function index()
     {
-        return User::paginate();
+        return User::with('role')->paginate();
     }
 
     public function show($id)
     {
-        return User::find($id);
+        return User::with('role')->find($id);
     }
 
     public function store(UserCreateRequest $request)
     {
-        $user = User::create($request->only('first_name', 'last_name', 'email')+[
+        $user = User::create($request->only('first_name', 'last_name', 'email', 'role_id')+[
             'password'=>Hash::make(1234),
         ]);
 
@@ -36,7 +36,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        $user->update($request->only('first_name', 'last_name', 'email'));
+        $user->update($request->only('first_name', 'last_name', 'email', 'role_id'));
 
         return response($user, Response::HTTP_ACCEPTED);
     }
