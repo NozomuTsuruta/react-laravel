@@ -34,6 +34,7 @@ Route::group(['middleware'=>'auth:api'], function () {
     Route::put('user/info', [UserController::class, 'updateInfo']);
     Route::put('user/password', [UserController::class, 'updatePassword']);
     Route::post('upload', [ImageController::class, 'upload']);
+    Route::get('export', [OrderController::class, 'export']);
 
     Route::apiResource('users', UserController::class);
     Route::apiResource('roles', RoleController::class);
