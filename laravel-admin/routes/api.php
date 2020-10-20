@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -30,6 +31,7 @@ Route::post('login', [AuthController::class,'login']);
 Route::post('register', [AuthController::class,'register']);
 
 Route::group(['middleware'=>'auth:api'], function () {
+    Route::get('chart', [DashBoardController::class, 'chart']);
     Route::get('user', [UserController::class, 'user']);
     Route::put('user/info', [UserController::class, 'updateInfo']);
     Route::put('user/password', [UserController::class, 'updatePassword']);
@@ -40,4 +42,5 @@ Route::group(['middleware'=>'auth:api'], function () {
     Route::apiResource('roles', RoleController::class);
     Route::apiResource('products', ProductController::class);
     Route::apiResource('orders', OrderController::class)->only('index','show');
+    Route::apiResource('permissions', PermissionController::class)->only('index');
 });

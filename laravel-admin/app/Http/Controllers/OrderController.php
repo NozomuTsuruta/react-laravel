@@ -10,6 +10,8 @@ class OrderController extends Controller
 {
     public function index()
     {
+        Gate::authorize('view', 'orders');
+
         $order = Order::paginate();
 
         return OrderResource::collection($order);
@@ -17,11 +19,15 @@ class OrderController extends Controller
 
     public function show($id)
     {
+        Gate::authorize('view', 'orders');
+
         return new OrderResource(Order::find($id));
     }
 
     public function export()
     {
+        Gate::authorize('view', 'orders');
+
         $headers = [
             "Content-type"=>"text/csv",
             "Content-Disposition"=>"attachment: filename=orders.csv",
@@ -30,15 +36,15 @@ class OrderController extends Controller
             "Expires"=>"0",
         ];
 
-        $callback = function() {
+        $callback = function () {
             $orders =Order::all();
-            $file = fopen('php://output','w');
+            $file = fopen('php://output', 'w');
 
             //Header Row
             fputcsv($file, ['ID', 'Name', 'Email', 'Product Title', 'Price', 'Quantity']);
 
             //Body
-            foreach ($orders as $order){
+            foreach ($orders as $order) {
                 fputcsv($file, [$order->id,$order->name,$order->email,'','','']);
 
                 foreach ($order->orderItems as $orderItem) {
@@ -49,6 +55,6 @@ class OrderController extends Controller
             fclose($file);
         };
 
-        return \Response::stream($callback,200,$headers);
+        return \Response::stream($callback, 200, $headers);
     }
 }
