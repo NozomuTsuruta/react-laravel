@@ -5,6 +5,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN docker-php-ext-install pdo mbstring pdo_mysql
 
 WORKDIR /app
+RUN echo "file_uploads = On\n" \
+         "memory_limit = 2G\n" \
+         "upload_max_filesize = 500M\n" \
+         "post_max_size = 500M\n" \
+         "max_execution_time = 600\n" \
+         > /usr/local/etc/php/conf.d/uploads.ini
 COPY . .
 RUN composer install
 
