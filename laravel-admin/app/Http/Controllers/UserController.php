@@ -18,6 +18,7 @@ class UserController extends Controller
     /**
      * @OA\Get(path="/users",
      *  security={{"bearerAuth":{}}},
+     *  tags={"Users"},
      *  @OA\Response(response="200",
      *      description="User Controller",
      *  ),
@@ -43,6 +44,7 @@ class UserController extends Controller
     /**
      * @OA\Get(path="/users/{id}",
      *  security={{"bearerAuth":{}}},
+     *  tags={"Users"},
      *  @OA\Response(response="200",
      *      description="User",
      *  ),
@@ -71,6 +73,7 @@ class UserController extends Controller
      * @OA\Post(
      *  path="/users",
      *  security={{"bearerAuth":{}}},
+     *  tags={"Users"},
      *  @OA\Response(response="201",
      *      description="User Create",
      *  ),
@@ -96,6 +99,7 @@ class UserController extends Controller
      * @OA\Put(
      *  path="/users/{id}",
      *  security={{"bearerAuth":{}}},
+     *  tags={"Users"},
      *  @OA\Response(response="202",
      *      description="User Update",
      *  ),
@@ -130,6 +134,7 @@ class UserController extends Controller
      * @OA\Delete(
      *  path="/users/{id}",
      *  security={{"bearerAuth":{}}},
+     *  tags={"Users"},
      *  @OA\Response(response="204",
      *      description="User Delete",
      *  ),
@@ -154,6 +159,17 @@ class UserController extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @OA\Get(
+     *  path="/user",
+     *  security={{"bearerAuth":{}}},
+     *  tags={"Profile"},
+     *  @OA\Response(response="200",
+     *      description="Authenticated User",
+     *  )
+     * )
+     */
+
     public function user()
     {
         $user = \Auth::user();
@@ -165,6 +181,21 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Put(
+     *  path="/user/info",
+     *  security={{"bearerAuth":{}}},
+     *  tags={"Profile"},
+     *  @OA\Response(response="202",
+     *      description="User Info Update",
+     *  ),
+     *  @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/UpdateInfoRequest")
+     *  )
+     * )
+     */
+
     public function updateInfo(UpdateInfoRequest $request)
     {
         $user = \Auth::user();
@@ -174,11 +205,26 @@ class UserController extends Controller
         return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
 
+    /**
+     * @OA\Put(
+     *  path="/user/password",
+     *  security={{"bearerAuth":{}}},
+     *  tags={"Profile"},
+     *  @OA\Response(response="202",
+     *      description="User Password Update",
+     *  ),
+     *  @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/UpdatePasswordRequest")
+     *  )
+     * )
+     */
+
     public function updatePassword(UpdatePasswordRequest $request)
     {
         $user = \Auth::user();
 
-        $user->update(['password'=>Hash::make($request->only('password'))]);
+        $user->update(['password'=>Hash::make($request->input('password'))]);
 
         return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }

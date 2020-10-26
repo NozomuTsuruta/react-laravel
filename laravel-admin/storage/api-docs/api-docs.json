@@ -16,6 +16,9 @@
     "paths": {
         "/users": {
             "get": {
+                "tags": [
+                    "Users"
+                ],
                 "operationId": "App\\Http\\Controllers\\UserController::index",
                 "parameters": [
                     {
@@ -39,6 +42,9 @@
                 ]
             },
             "post": {
+                "tags": [
+                    "Users"
+                ],
                 "operationId": "App\\Http\\Controllers\\UserController::store",
                 "requestBody": {
                     "required": true,
@@ -64,6 +70,9 @@
         },
         "/users/{id}": {
             "get": {
+                "tags": [
+                    "Users"
+                ],
                 "operationId": "App\\Http\\Controllers\\UserController::show",
                 "parameters": [
                     {
@@ -88,6 +97,9 @@
                 ]
             },
             "put": {
+                "tags": [
+                    "Users"
+                ],
                 "operationId": "App\\Http\\Controllers\\UserController::update",
                 "parameters": [
                     {
@@ -122,6 +134,9 @@
                 ]
             },
             "delete": {
+                "tags": [
+                    "Users"
+                ],
                 "operationId": "App\\Http\\Controllers\\UserController::destroy",
                 "parameters": [
                     {
@@ -145,10 +160,118 @@
                     }
                 ]
             }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "operationId": "App\\Http\\Controllers\\UserController::user",
+                "responses": {
+                    "200": {
+                        "description": "Authenticated User"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/info": {
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "operationId": "App\\Http\\Controllers\\UserController::updateInfo",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateInfoRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "User Info Update"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/password": {
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "operationId": "App\\Http\\Controllers\\UserController::updatePassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdatePasswordRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "User Password Update"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
+            "UpdateInfoRequest": {
+                "title": "Update User Info request",
+                "description": "Update User Info request body data",
+                "properties": {
+                    "first_name": {
+                        "title": "first_name",
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "title": "last_name",
+                        "type": "string"
+                    },
+                    "email": {
+                        "title": "email",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdatePasswordRequest": {
+                "title": "Update User Password request",
+                "description": "Update User Password request body data",
+                "properties": {
+                    "password": {
+                        "title": "password",
+                        "type": "string"
+                    },
+                    "password_confirm": {
+                        "title": "password_confirm",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "UserCreateRequest": {
                 "title": "Store User request",
                 "description": "Store User request body data",
