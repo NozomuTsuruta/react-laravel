@@ -15,6 +15,22 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    /**
+     * @OA\Get(path="/users",
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Response(response="200",
+     *      description="User Controller",
+     *  ),
+     *  @OA\Parameter(
+     *    name="page",
+     *    description="Pagination page",
+     *    in="query",
+     *    @OA\Schema(
+     *      type="integer"
+     *    )
+     *  )
+     * )
+     */
     public function index()
     {
         Gate::authorize('view','users');
@@ -24,6 +40,24 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
 
+    /**
+     * @OA\Get(path="/users/{id}",
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Response(response="200",
+     *      description="User",
+     *  ),
+     *  @OA\Parameter(
+     *    name="id",
+     *    description="User ID",
+     *    in="path",
+     *    required=true,
+     *    @OA\Schema(
+     *      type="integer"
+     *    )
+     *  )
+     * )
+     */
+
     public function show($id)
     {
         Gate::authorize('view','users');
@@ -32,6 +66,20 @@ class UserController extends Controller
 
         return new UserResource($user);
     }
+
+    /**
+     * @OA\Post(
+     *  path="/users",
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Response(response="201",
+     *      description="User Create",
+     *  ),
+     *  @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/UserCreateRequest")
+     *  )
+     * )
+     */
 
     public function store(UserCreateRequest $request)
     {
@@ -44,6 +92,29 @@ class UserController extends Controller
         return response(new UserResource($user), Response::HTTP_CREATED);
     }
 
+    /**
+     * @OA\Put(
+     *  path="/users/{id}",
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Response(response="202",
+     *      description="User Update",
+     *  ),
+     *  @OA\Parameter(
+     *    name="id",
+     *    description="User ID",
+     *    in="path",
+     *    required=true,
+     *    @OA\Schema(
+     *      type="integer"
+     *    )
+     *  ),
+     *  @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(ref="#/components/schemas/UserUpdateRequest")
+     *  )
+     * )
+     */
+
     public function update(UserUpdateRequest $request, $id)
     {
         Gate::authorize('edit','users');
@@ -54,6 +125,25 @@ class UserController extends Controller
 
         return response(new UserResource($user), Response::HTTP_ACCEPTED);
     }
+
+    /**
+     * @OA\Delete(
+     *  path="/users/{id}",
+     *  security={{"bearerAuth":{}}},
+     *  @OA\Response(response="204",
+     *      description="User Delete",
+     *  ),
+     *  @OA\Parameter(
+     *    name="id",
+     *    description="User ID",
+     *    in="path",
+     *    required=true,
+     *    @OA\Schema(
+     *      type="integer"
+     *    )
+     *  )
+     * )
+     */
 
     public function destroy($id)
     {
