@@ -1,15 +1,20 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
+
+type FormData = {
+    email: string;
+    password: string;
+};
 
 const Login = () => {
+    const { register, handleSubmit } = useForm<FormData>();
+
+    const on_submit = (data: FormData) => {
+        console.log(data);
+    };
+
     return (
-        <form className="form-signin">
-            <img
-                className="mb-4"
-                src="/docs/4.5/assets/brand/bootstrap-solid.svg"
-                alt=""
-                width="72"
-                height="72"
-            />
+        <form className="form-signin" onSubmit={handleSubmit(on_submit)}>
             <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
             <label htmlFor="inputEmail" className="sr-only">
                 Email address
@@ -19,6 +24,8 @@ const Login = () => {
                 id="inputEmail"
                 className="form-control"
                 placeholder="Email address"
+                name="email"
+                ref={register({required: true})}
             />
             <label htmlFor="inputPassword" className="sr-only">
                 Password
@@ -28,6 +35,8 @@ const Login = () => {
                 id="inputPassword"
                 className="form-control"
                 placeholder="Password"
+                name="password"
+                ref={register({required: true})}
             />
             <div className="checkbox mb-3">
                 <label>
