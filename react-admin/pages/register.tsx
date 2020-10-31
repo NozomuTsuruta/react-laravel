@@ -1,6 +1,7 @@
+import { useRouter } from 'next/dist/client/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import axios from '../config/axios';
+import axios from 'axios';
 
 type FormData = {
     first_name: string;
@@ -12,6 +13,7 @@ type FormData = {
 
 const Register = () => {
     const { register, handleSubmit, reset } = useForm<FormData>();
+    const router = useRouter();
 
     //register
     const on_submit = async (data: FormData) => {
@@ -21,6 +23,7 @@ const Register = () => {
                 data
             );
             reset();
+            router.push('/login');
             console.log(res);
         } catch (res) {
             console.log(res);

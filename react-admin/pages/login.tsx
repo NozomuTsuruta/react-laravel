@@ -1,5 +1,8 @@
+import { useRouter } from 'next/dist/client/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 type FormData = {
     email: string;
@@ -8,9 +11,17 @@ type FormData = {
 
 const Login = () => {
     const { register, handleSubmit } = useForm<FormData>();
+    const router = useRouter();
+    const [, set_cookies] = useCookies();
 
-    const on_submit = (data: FormData) => {
+    const on_submit = async (data: FormData) => {
+        const res = await axios.post('/login', {
+            email: data.email,
+            password: data.password,
+        });
+        set_cookies('token', res.data.token, { path: '/', maxAge: 3600 * 24 });
         console.log(data);
+        router.push('/');
     };
 
     return (
@@ -25,7 +36,7 @@ const Login = () => {
                 className="form-control"
                 placeholder="Email address"
                 name="email"
-                ref={register({required: true})}
+                ref={register({ required: true })}
             />
             <label htmlFor="inputPassword" className="sr-only">
                 Password
@@ -36,7 +47,7 @@ const Login = () => {
                 className="form-control"
                 placeholder="Password"
                 name="password"
-                ref={register({required: true})}
+                ref={register({ required: true })}
             />
             <div className="checkbox mb-3">
                 <label>
