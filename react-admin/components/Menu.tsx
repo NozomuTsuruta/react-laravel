@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 export const Menu = () => (
@@ -8,9 +9,18 @@ export const Menu = () => (
         <div className="sidebar-sticky pt-3">
             <ul className="nav flex-column">
                 <li className="nav-item">
-                    <a className="nav-link active" href="#">
-                        Dashboard
-                    </a>
+                    <Link href="/dashboard">
+                        <a className="nav-link active" href="#">
+                            Dashboard
+                        </a>
+                    </Link>
+                </li>
+                <li className="nav-item">
+                    <Link href="/users/">
+                        <a className="nav-link">
+                            Users
+                        </a>
+                    </Link>
                 </li>
             </ul>
         </div>

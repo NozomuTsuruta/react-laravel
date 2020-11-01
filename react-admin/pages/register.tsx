@@ -17,17 +17,10 @@ const Register = () => {
 
     //register
     const on_submit = async (data: FormData) => {
-        try {
-            const res = await axios.post(
-                '/register',
-                data
-            );
-            reset();
-            router.push('/login');
-            console.log(res);
-        } catch (res) {
-            console.log(res);
-        }
+        const res = await axios.post('/register', data);
+        reset();
+        console.log(res)
+        router.push('/login');
     };
 
     return (

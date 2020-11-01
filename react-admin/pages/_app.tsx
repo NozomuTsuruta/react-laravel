@@ -15,22 +15,20 @@ export default function App({ Component, pageProps }: AppProps) {
     axios.defaults.headers.post['Content-Type'] =
         'application/json;charset=utf-8';
     axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+    axios.defaults.headers.Authorization = `Bearer ${cookies['token']}`;
 
     const route = useRouter();
     useEffect(() => {
         (async () => {
             try {
-                axios.defaults.headers.Authorization = `Bearer ${cookies['token']}`;
-                const res = await axios.get('/user');
-                console.log(res);
+                await axios.get('/user');
                 if (
                     route.pathname === '/login' ||
                     route.pathname === '/register'
                 ) {
                     route.push('/');
                 }
-            } catch (res) {
-                console.log(res);
+            } catch {
                 if (route.pathname !== '/register') {
                     route.push('/login');
                 }
