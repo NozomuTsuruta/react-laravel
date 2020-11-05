@@ -20,7 +20,6 @@ const Login = () => {
             password: data.password,
         });
         set_cookies('token', res.data.token, { path: '/', maxAge: 3600 * 24 });
-        console.log(data);
         router.push('/');
     };
 

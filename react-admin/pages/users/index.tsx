@@ -1,22 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { IUser } from '../Types';
+import { IUser } from '../../Types';
 import { useRouter } from 'next/dist/client/router';
 
 const Users = () => {
     const [users, set_users] = useState<IUser[]>([]);
     const [last_page, set_last_page] = useState(0);
     const router = useRouter();
-    const page = router.query.page == 'NaN' ? 1 : router.query.page;
+    const page = router.query.page;
 
     useEffect(() => {
         (async () => {
             const res = await axios.get(`/users?page=${page}`);
             set_users(res.data.data);
             set_last_page(res.data.meta.last_page);
+            if (!router.query.page) {
+                router.push('/users?page=1');
+            }
         })();
     }, [page]);
+
+    const on_click_delete = async (id: number) => {
+        if (window.confirm('Are you sure you want to delete this record?')) {
+            try {
+                await axios.delete(`users/${id}`);
+                set_users((prev) => prev.filter((user) => user.id !== id));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
 
     return (
         <>
@@ -51,7 +65,12 @@ const Users = () => {
                                         <a className="btn btn-sm btn-outline-secondary">
                                             Edit
                                         </a>
-                                        <a className="btn btn-sm btn-outline-secondary">
+                                        <a
+                                            className="btn btn-sm btn-outline-secondary"
+                                            onClick={() =>
+                                                on_click_delete(user.id)
+                                            }
+                                        >
                                             Delete
                                         </a>
                                     </div>

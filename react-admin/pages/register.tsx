@@ -17,9 +17,8 @@ const Register = () => {
 
     //register
     const on_submit = async (data: FormData) => {
-        const res = await axios.post('/register', data);
+        await axios.post('/register', data);
         reset();
-        console.log(res)
         router.push('/login');
     };
 
