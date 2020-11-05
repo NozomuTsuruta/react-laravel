@@ -62,9 +62,11 @@ const Users = () => {
                                 <td>{user.role.name}</td>
                                 <td>
                                     <div className="btn-group mr-2">
-                                        <a className="btn btn-sm btn-outline-secondary">
-                                            Edit
-                                        </a>
+                                        <Link href={`/users/${user.id}/edit`}>
+                                            <a className="btn btn-sm btn-outline-secondary">
+                                                Edit
+                                            </a>
+                                        </Link>
                                         <a
                                             className="btn btn-sm btn-outline-secondary"
                                             onClick={() =>
