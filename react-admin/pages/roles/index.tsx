@@ -11,12 +11,12 @@ const Roles = () => {
             const res = await Axios.get('/roles');
             set_roles(res.data.data);
         })();
-    });
+    },[]);
 
     const on_click_delete = async (id: number) => {
         if (window.confirm('Are you sure you want to delete this record?')) {
             try {
-                await Axios.delete(`users/${id}`);
+                await Axios.delete(`roles/${id}`);
                 set_roles((prev) => prev.filter((role) => role.id !== id));
             } catch (error) {
                 console.log(error);

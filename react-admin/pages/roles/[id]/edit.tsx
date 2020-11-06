@@ -2,36 +2,49 @@ import Axios from 'axios';
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { IPermission } from '../../Types';
+import { IPermission, IRole } from '../../../Types';
 
 interface IForm {
     name: string;
     [name: string]: string;
 }
 
-const RoleCreate = () => {
+const RoleEdit = () => {
+    const [role, set_role] = useState<IRole>();
     const [permissions, set_permissions] = useState<IPermission[]>([]);
     const { reset, register, handleSubmit } = useForm<IForm>();
 
     const router = useRouter();
+    console.log(router.query.id);
 
     useEffect(() => {
-        (async () => {
-            const res = await Axios.get('/permissions');
-            set_permissions(res.data.data);
-        })();
-    }, []);
+        if (router.query.id) {
+            (async () => {
+                let res = await Axios.get('/permissions');
+                set_permissions(res.data.data);
+                res = await Axios.get(`/roles/${router.query.id}`);
+                set_role(res.data.data);
+            })();
+        }
+    }, [router.query.id]);
 
     const on_submit = async (data: IForm) => {
         const _permissions = Object.values(data)
             .map((value) => Number(value))
             .filter((value) => value && !isNaN(value));
-        await Axios.post('/roles', {
+        await Axios.put(`/roles/${router.query.id}`, {
             name: data.name,
             permissions: _permissions,
         });
         reset();
         router.push('/roles');
+    };
+
+    const default_checked = (id: number) => {
+        const match_id = role?.permissions.find(
+            (permission) => permission.id === id
+        );
+        return Boolean(match_id);
     };
 
     return (
@@ -45,6 +58,7 @@ const RoleCreate = () => {
                         name="name"
                         id="name"
                         ref={register({ required: true })}
+                        defaultValue={role?.name}
                     />
                 </div>
             </div>
@@ -64,6 +78,7 @@ const RoleCreate = () => {
                                     name={name}
                                     ref={register}
                                     value={id}
+                                    checked={default_checked(id)}
                                 />
                                 <label htmlFor={name}>{name}</label>
                             </div>
@@ -75,4 +90,4 @@ const RoleCreate = () => {
     );
 };
 
-export default RoleCreate;
+export default RoleEdit;
