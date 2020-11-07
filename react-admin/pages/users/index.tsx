@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { IUser } from '../../Types';
 import { useRouter } from 'next/dist/client/router';
 import { Paginetor } from '../../components/Paginetor';
+import { Deleter } from '../../components/Deleter';
+import { Creater } from '../../components/CreateLink';
+import { Table } from '../../components/Table';
 
 const Users = () => {
     const [users, set_users] = useState<IUser[]>([]);
@@ -22,69 +25,43 @@ const Users = () => {
         })();
     }, [page]);
 
-    const on_click_delete = async (id: number) => {
-        if (window.confirm('Are you sure you want to delete this record?')) {
-            try {
-                await axios.delete(`users/${id}`);
-                set_users((prev) => prev.filter((user) => user.id !== id));
-            } catch (error) {
-                console.log(error);
-            }
-        }
+    const handle_delete = (id: number) => {
+        set_users((prev) => prev.filter((user) => user.id !== id));
     };
 
     return (
         <>
-            <div className="d-flex justyfy-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <div className="btn-toolbar mb-2 mbo-md-0">
-                    <Link href="/users/create">
-                        <a className="btn btn-sm btn-outline-secondary">Add</a>
-                    </Link>
-                </div>
-            </div>
-            <div className="table-responsive">
-                <table className="table table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map((user) => (
-                            <tr key={user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.first_name}</td>
-                                <td>{user.last_name}</td>
-                                <td>{user.email}r</td>
-                                <td>{user.role.name}</td>
-                                <td>
-                                    <div className="btn-group mr-2">
-                                        <Link href={`/users/${user.id}/edit`}>
-                                            <a className="btn btn-sm btn-outline-secondary">
-                                                Edit
-                                            </a>
-                                        </Link>
-                                        <a
-                                            className="btn btn-sm btn-outline-secondary"
-                                            onClick={() =>
-                                                on_click_delete(user.id)
-                                            }
-                                        >
-                                            Delete
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            
-            <Paginetor page={Number(page)} last_page={last_page} name="users" />
+            <Creater endpoint="users" />
+            <Table array={['Name', 'Email', 'Role', 'Action']}>
+                {users.map((user) => (
+                    <tr key={user.id}>
+                        <td>{user.id}</td>
+                        <td>{user.first_name}</td>
+                        <td>{user.last_name}</td>
+                        <td>{user.email}r</td>
+                        <td>{user.role.name}</td>
+                        <td>
+                            <div className="btn-group mr-2">
+                                <Link href={`/users/${user.id}/edit`}>
+                                    <a className="btn btn-sm btn-outline-secondary">
+                                        Edit
+                                    </a>
+                                </Link>
+                                <Deleter
+                                    id={user.id}
+                                    endpoint="users"
+                                    handle_delete={handle_delete}
+                                />
+                            </div>
+                        </td>
+                    </tr>
+                ))}
+            </Table>
+            <Paginetor
+                page={Number(page)}
+                last_page={last_page}
+                endpoint="users"
+            />
         </>
     );
 };
