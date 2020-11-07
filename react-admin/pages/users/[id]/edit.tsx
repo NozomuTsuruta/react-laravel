@@ -18,13 +18,15 @@ const UserEdit = () => {
     const [user, set_user] = useState<IUser>();
 
     useEffect(() => {
-        (async () => {
-            let res = await Axios.get('/roles');
-            set_roles(res.data.data);
-            res = await Axios.get(`/users/${router.query.id}`);
-            set_user(res.data.data);
-        })();
-    }, []);
+        if (router.query.id) {
+            (async () => {
+                let res = await Axios.get('/roles');
+                set_roles(res.data.data);
+                res = await Axios.get(`/users/${router.query.id}`);
+                set_user(res.data.data);
+            })();
+        }
+    }, [router.query.id]);
 
     const on_submit = async (data: IForm) => {
         await Axios.put(`/users/${router.query.id}`, data);

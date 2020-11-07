@@ -45,7 +45,7 @@ const Roles = () => {
                         <td>{product.price}</td>
                         <td>
                             <div className="btn-group mr-2">
-                                <Link href={`/roles/${product.id}/edit`}>
+                                <Link href={`/products/${product.id}/edit`}>
                                     <a className="btn btn-sm btn-outline-secondary">
                                         Edit
                                     </a>
