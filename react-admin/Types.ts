@@ -25,3 +25,19 @@ export interface IProduct {
     image: string;
     price: number;
 }
+
+export interface IOrder {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    total: number;
+    order_items: IOrderItem[];
+}
+
+export interface IOrderItem {
+    id: number;
+    product_title: string;
+    price: number;
+    quantity: number;
+}
