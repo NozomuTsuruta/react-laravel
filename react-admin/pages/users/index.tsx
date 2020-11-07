@@ -3,6 +3,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { IUser } from '../../Types';
 import { useRouter } from 'next/dist/client/router';
+import { Paginetor } from '../../components/Paginetor';
 
 const Users = () => {
     const [users, set_users] = useState<IUser[]>([]);
@@ -82,25 +83,8 @@ const Users = () => {
                     </tbody>
                 </table>
             </div>
-
-            <nav>
-                <ul className="pagination">
-                    <li className="page-item">
-                        {Number(page) > 1 && (
-                            <Link href={`/users?page=${Number(page) - 1}`}>
-                                <a className="page-link">Previous</a>
-                            </Link>
-                        )}
-                    </li>
-                    <li className="page-item">
-                        {Number(page) < last_page && (
-                            <Link href={`/users?page=${Number(page) + 1}`}>
-                                <a className="page-link">Next</a>
-                            </Link>
-                        )}
-                    </li>
-                </ul>
-            </nav>
+            
+            <Paginetor page={Number(page)} last_page={last_page} name="users" />
         </>
     );
 };

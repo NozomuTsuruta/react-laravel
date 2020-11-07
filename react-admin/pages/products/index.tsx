@@ -1,17 +1,27 @@
 import Axios from 'axios';
+import { useRouter } from 'next/dist/client/router';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { IProduct } from '../../Types';
+import { Paginetor } from '../../components/Paginetor';
 
 const Roles = () => {
     const [products, set_products] = useState<IProduct[]>([]);
 
+    const [last_page, set_last_page] = useState(0);
+    const router = useRouter();
+    const page = router.query.page;
+
     useEffect(() => {
         (async () => {
-            const res = await Axios.get('/products');
+            const res = await Axios.get(`/products?page=${page}`);
             set_products(res.data.data);
+            set_last_page(res.data.meta.last_page);
+            if (!router.query.page) {
+                router.push('/products?page=1');
+            }
         })();
-    }, []);
+    }, [page]);
 
     const on_click_delete = async (id: number) => {
         if (window.confirm('Are you sure you want to delete this record?')) {
@@ -81,6 +91,8 @@ const Roles = () => {
                     </tbody>
                 </table>
             </div>
+
+            <Paginetor page={Number(page)} last_page={last_page} name="products" />
         </>
     );
 };
