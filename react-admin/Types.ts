@@ -17,3 +17,11 @@ export interface IPermission {
     id: number;
     name: string;
 }
+
+export interface IProduct {
+    id: number;
+    title: string;
+    description: string;
+    image: string;
+    price: number;
+}

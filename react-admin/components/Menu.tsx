@@ -16,9 +16,23 @@ export const Menu = () => (
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link href="/users/">
+                    <Link href="/users">
                         <a className="nav-link">
                             Users
+                        </a>
+                    </Link>
+                </li>
+                <li className="nav-item">
+                    <Link href="/roles">
+                        <a className="nav-link">
+                            Roles
+                        </a>
+                    </Link>
+                </li>
+                <li className="nav-item">
+                    <Link href="/products">
+                        <a className="nav-link">
+                            Products
                         </a>
                     </Link>
                 </li>
