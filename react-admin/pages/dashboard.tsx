@@ -1,31 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import c3 from 'c3';
+import Axios from 'axios';
 
-const DashBoard = () => (
-    <>
-        <h2>Section title</h2>
-        <div className="table-responsive">
-            <table className="table table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>Lorem</td>
-                        <td>ipsum</td>
-                        <td>dolor</td>
-                        <td>sit</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </>
-);
+const DashBoard = () => {
+    useEffect(() => {
+        (async () => {
+            let chart = c3.generate({
+                bindto: '#chart',
+                data: {
+                    x: 'x',
+                    columns: [['x'], ['Sales']],
+                    types: {
+                        Sales: 'bar',
+                    },
+                },
+                axis: {
+                    x: {
+                        type: 'timeseries',
+                        tick: {
+                            format: '%Y-%m-%d',
+                        },
+                    },
+                },
+            });
+
+            const res = await Axios.get('/chart');
+
+            const records: { date: string; sum: number }[] = res.data.data;
+
+            chart.load({
+                columns: [
+                    ['x', ...records.map((r) => r.date)],
+                    ['Sales', ...records.map((r) => r.sum)],
+                ],
+            });
+        })();
+    }, []);
+    return (
+        <>
+            <h2>Daily Sales</h2>
+            <div id="chart" />
+        </>
+    );
+};
 
 export default DashBoard;
